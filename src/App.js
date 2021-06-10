@@ -1,24 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar'
+import {BrowserRouter as Router,Switch,Route} from 'react-router-dom'
+import {createStore,applyMiddleware} from "redux"
+import reducers from './reducers'
+import {Provider} from 'react-redux'
+import ReduxThunk from 'redux-thunk'
+import Home from './components/pages/Home'
+import Questions from './components/pages/Questions'
+import Result from './components/pages/Result'
+
+const store = createStore(reducers, {},applyMiddleware(ReduxThunk));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Provider store={store}>
+        <Router>
+          <Navbar/>
+          <Switch>
+            <Route path='/' exact component={Home} />
+            <Route path='/questions' component={Questions} />
+            <Route path='/result' component={Result} /> 
+          </Switch>
+        </Router>
+      </Provider>
+    </>
   );
 }
 
