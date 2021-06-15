@@ -3,42 +3,60 @@ import {Link} from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from '../../actions/examAction'
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import { useHistory } from "react-router-dom";
 
-const Home = ({exam,getQuestion,genericUserChange}) => {
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+    },
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      fontWeight: theme.typography.fontWeightRegular,
+    },
+}));
 
+const Home = ({exam,getQuestion,genericUserChange,examButtonChange,changePage}) => {
 
     const handleChange = (e) => {
         genericUserChange("name",e.target.value)
     };
 
-    const startQuestion = () => {
-        var currentTime = new Date()
-        genericUserChange("dateStart",currentTime)
-        getQuestion();
-    }; 
+    const classes = useStyles();
 
+    const history = useHistory();
+
+    function handleClick() {
+        if(exam.user.name){
+            var currentTime = new Date()
+            genericUserChange("dateStart",currentTime)
+            examButtonChange(true)
+            getQuestion(history);
+            changePage('Questions')
+        }
+    }
+      
     return(
         <>
-            <h1>Start your exam</h1>
+            <div className={classes.root}>
+                <div align="center">
+                    <h1>Start your exam</h1>
 
-            <label>Name:</label>
+                    <TextField id="standard-basic" label="Your name" onChange={ handleChange } value={ exam.user.name } /> <br/><br/>
 
-            <input type="text" onChange={ handleChange } value={ exam.user.name } /> <br/><br/>
-
-            <Link to="/questions" >
-                <button
-                    onClick={startQuestion}
-                >  
+                    <Button variant="contained" color="primary" onClick={handleClick} >
                         Start
-                </button>
-            </Link>
+                    </Button>
+                </div>
+            </div>
         </>
     )
 }
 
 function mapStateToProps(state) {
-    console.log(state.exam)
     return {exam:state.exam}
 }
 
