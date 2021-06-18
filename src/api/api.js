@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 
-const MAIN_SERVICE = 'http://localhost:8080'
+const MAIN_SERVICE = 'ec2-54-169-65-143.ap-southeast-1.compute.amazonaws.com:4000'
 
 export const getQuestions = async() => {
     try{
